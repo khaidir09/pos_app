@@ -48,16 +48,19 @@ class Category {
   factory Category.fromMap(Map<String, dynamic> json) => Category(
         id: json["id"],
         name: json["name"],
+        // userId: json["user_id"],
       );
 
   factory Category.fromLocal(Map<String, dynamic> json) => Category(
         id: json["category_id"],
         name: json["name"],
+        // userId: json["user_id"],
       );
 
   Map<String, dynamic> toMap() => {
         "category_id": id,
         "name": name,
+        // "user_id": userId,
       };
 
   @override

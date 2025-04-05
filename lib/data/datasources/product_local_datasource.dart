@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_pos_app/data/models/response/product_response_model.dart';
 import 'package:flutter_pos_app/presentation/order/models/order_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -25,12 +26,13 @@ class ProductLocalDatasource {
       path,
       version: 1,
       onCreate: _createDB,
+      // onUpgrade: _upgradeDB,
     );
   }
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE $tableProducts (
+      CREATE TABLE IF NOT EXISTS $tableProducts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         product_id INTEGER,
         name TEXT,
@@ -39,14 +41,14 @@ class ProductLocalDatasource {
         image TEXT,
         category TEXT,
         category_id INTEGER,
-        user_id INTEGER,
         is_best_seller INTEGER,
-        is_sync INTEGER DEFAULT 0
+        is_sync INTEGER DEFAULT 0,
+        user_id INTEGER DEFAULT 0
       )
     ''');
 
     await db.execute('''
-      CREATE TABLE orders (
+      CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nominal INTEGER,
         payment_method TEXT,
@@ -60,16 +62,16 @@ class ProductLocalDatasource {
 
     //categories
     await db.execute('''
-      CREATE TABLE categories (
+      CREATE TABLE IF NOT EXISTS categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         category_id INTEGER,
         name TEXT,
-        user_id INTEGER
+        user_id INTEGER DEFAULT 0
       )
     ''');
 
     await db.execute('''
-      CREATE TABLE order_items (
+      CREATE TABLE IF NOT EXISTS order_items (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         id_order INTEGER,
         id_product INTEGER,
@@ -100,11 +102,21 @@ class ProductLocalDatasource {
     ''');
   }
 
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+
+    _database = await _initDB('pos13.db');
+    return _database!;
+  }
+
   //insert all categories
-  Future<void> insertAllCategories(List<Category> categories) async {
+  Future<void> insertAllCategories(List<Category> categories,
+      {required int userId}) async {
     final db = await instance.database;
     for (var category in categories) {
-      await db.insert('categories', category.toMap());
+      final data = category.toMap();
+      data['user_id'] = userId;
+      await db.insert('categories', data);
     }
   }
 
@@ -125,7 +137,9 @@ class ProductLocalDatasource {
   //save order
   Future<int> saveOrder(OrderModel order) async {
     final db = await instance.database;
-    int id = await db.insert('orders', order.toMapForLocal());
+    final orderMap = order.toMapForLocal();
+    int id = await db.insert('orders', orderMap);
+
     for (var orderItem in order.orders) {
       await db.insert('order_items', orderItem.toMapForLocal(id));
     }
@@ -221,23 +235,28 @@ class ProductLocalDatasource {
   //get order item by id order
   Future<List<OrderItem>> getOrderItemByOrderId(int idOrder) async {
     final db = await instance.database;
-    final result = await db.query('order_items', where: 'id_order = $idOrder');
+    final result = await db
+        .query('order_items', where: 'id_order = ?', whereArgs: [idOrder]);
 
-    List<OrderItem> results = await Future.wait(result.map((item) async {
-      // Your asynchronous operation here
+    List<OrderItem> results = [];
+
+    for (var item in result) {
       final product = await getProductById(item['id_product'] as int);
-      return OrderItem(product: product!, quantity: item['quantity'] as int);
-    }));
+
+      // Jika product tidak ditemukan, lewati item ini
+      if (product == null) {
+        debugPrint(
+            '⚠️ Produk dengan ID ${item['id_product']} tidak ditemukan!');
+        continue;
+      }
+
+      results.add(OrderItem(
+        product: product,
+        quantity: item['quantity'] as int,
+      ));
+    }
+
     return results;
-
-    // return result.map((e) => OrderItem.fromMap(e)).toList();
-  }
-
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-
-    _database = await _initDB('pos13.db');
-    return _database!;
   }
 
   //remove all data product
@@ -247,17 +266,20 @@ class ProductLocalDatasource {
   }
 
   //insert data product from list product
-  Future<void> insertAllProduct(List<Product> products) async {
+  Future<void> insertAllProduct(List<Product> products,
+      {required int userId}) async {
     final db = await instance.database;
     for (var product in products) {
-      await db.insert(tableProducts, product.toLocalMap());
+      final data = product.toLocalMap();
+      data['user_id'] = userId;
+      await db.insert(tableProducts, data);
     }
   }
 
   //isert data product
   Future<Product> insertProduct(Product product) async {
     final db = await instance.database;
-    int id = await db.insert(tableProducts, {...product.toMap()});
+    int id = await db.insert(tableProducts, product.toMap());
     return product.copyWith(id: id);
   }
 
@@ -272,7 +294,8 @@ class ProductLocalDatasource {
   //get product by id
   Future<Product?> getProductById(int id) async {
     final db = await instance.database;
-    final result = await db.query(tableProducts);
+    final result =
+        await db.query(tableProducts, where: 'product_id = ?', whereArgs: [id]);
 
     if (result.isEmpty) {
       return null;

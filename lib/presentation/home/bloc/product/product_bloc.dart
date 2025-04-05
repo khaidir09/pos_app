@@ -59,6 +59,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         stock: event.product.stock,
         category: event.product.category,
         categoryId: event.product.categoryId,
+        userId: event.product.userId,
         isBestSeller: event.product.isBestSeller ? 1 : 0,
         image: event.image,
       );

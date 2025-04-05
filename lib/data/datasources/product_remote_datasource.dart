@@ -33,9 +33,6 @@ class ProductRemoteDatasource {
     };
     var request = http.MultipartRequest(
         'POST', Uri.parse('${Variables.baseUrl}/api/products'));
-
-    Map<String, String> fields = productRequestModel.toMap();
-
     request.fields.addAll(productRequestModel.toMap());
     request.files.add(await http.MultipartFile.fromPath(
         'image', productRequestModel.image.path));

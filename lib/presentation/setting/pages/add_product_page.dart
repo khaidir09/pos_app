@@ -184,7 +184,7 @@ class _AddProductPageState extends State<AddProductPage> {
                               stock: stock,
                               category: category!.name,
                               categoryId: category!.id,
-                              // userId: user!.id,
+                              userId: user!.id,
                               isBestSeller: isBestSeller,
                               image: imageFile!.path);
                           context.read<ProductBloc>().add(

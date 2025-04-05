@@ -39,9 +39,9 @@ class Product {
   final int stock;
   final String category;
   final int categoryId;
+  final int userId;
   final String image;
   final bool isBestSeller;
-  // final int userId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -54,9 +54,9 @@ class Product {
     required this.stock,
     required this.category,
     required this.categoryId,
+    required this.userId,
     required this.image,
     this.isBestSeller = false,
-    // required this.userId,
     this.createdAt,
     this.updatedAt,
   });
@@ -78,7 +78,9 @@ class Product {
             : json["category_id"],
         image: json["image"] ?? '',
         isBestSeller: json["is_best_seller"] == 1 ? true : false,
-        // userId: json["user_id"] ?? 0,
+        userId: json["user_id"] is String
+            ? int.parse(json["user_id"])
+            : json["user_id"],
         // createdAt: DateTime.parse(json["created_at"]),
         // updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -89,6 +91,7 @@ class Product {
         "stock": stock,
         "category": category,
         "category_id": categoryId,
+        "user_id": userId,
         "image": image,
         "is_best_seller": isBestSeller ? 1 : 0,
         "product_id": productId,
@@ -99,6 +102,7 @@ class Product {
         "stock": stock,
         "category": category,
         "category_id": categoryId,
+        "user_id": userId,
         "image": image,
         "is_best_seller": isBestSeller ? 1 : 0,
         "product_id": id,
@@ -115,7 +119,7 @@ class Product {
     int? categoryId,
     String? image,
     bool? isBestSeller,
-    // int? userId,
+    int? userId,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -128,7 +132,7 @@ class Product {
       stock: stock ?? this.stock,
       category: category ?? this.category,
       categoryId: categoryId ?? this.categoryId,
-      // userId: userId ?? this.userId,
+      userId: userId ?? this.userId,
       image: image ?? this.image,
       isBestSeller: isBestSeller ?? this.isBestSeller,
       createdAt: createdAt ?? this.createdAt,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos_app/core/components/spaces.dart';
 import 'package:flutter_pos_app/core/extensions/build_context_ext.dart';
+import 'package:flutter_pos_app/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_pos_app/presentation/home/bloc/product/product_bloc.dart';
 import 'package:flutter_pos_app/presentation/setting/bloc/sync_order/sync_order_bloc.dart';
 
@@ -45,8 +46,15 @@ class _SyncDataPageState extends State<SyncDataPage> {
                 orElse: () {},
                 success: (_) async {
                   await ProductLocalDatasource.instance.removeAllProduct();
-                  await ProductLocalDatasource.instance
-                      .insertAllProduct(_.products.toList());
+
+                  // Ambil userId dari auth data
+                  final authData = await AuthLocalDatasource().getAuthData();
+                  final userId = authData.user.id;
+
+                  await ProductLocalDatasource.instance.insertAllProduct(
+                    _.products.toList(),
+                    userId: userId,
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       backgroundColor: AppColors.primary,
                       content: Text(
@@ -119,8 +127,15 @@ class _SyncDataPageState extends State<SyncDataPage> {
                 orElse: () {},
                 loaded: (data) async {
                   await ProductLocalDatasource.instance.removeAllCategories();
-                  await ProductLocalDatasource.instance
-                      .insertAllCategories(data.categories);
+
+                  // Ambil userId dari auth data
+                  final authData = await AuthLocalDatasource().getAuthData();
+                  final userId = authData.user.id;
+
+                  await ProductLocalDatasource.instance.insertAllCategories(
+                    data.categories,
+                    userId: userId,
+                  );
                   context
                       .read<CategoryBloc>()
                       .add(const CategoryEvent.getCategoriesLocal());

@@ -6,6 +6,7 @@ class ProductRequestModel {
   final int stock;
   final String category;
   final int categoryId;
+  final int userId;
   final int isBestSeller;
   final XFile image;
   ProductRequestModel({
@@ -14,6 +15,7 @@ class ProductRequestModel {
     required this.stock,
     required this.category,
     required this.categoryId,
+    required this.userId,
     required this.isBestSeller,
     required this.image,
   });
@@ -25,6 +27,7 @@ class ProductRequestModel {
       'stock': stock.toString(),
       'category': category,
       'category_id': categoryId.toString(),
+      'user_id': userId.toString(),
       'isBestSeller': isBestSeller.toString(),
     };
   }

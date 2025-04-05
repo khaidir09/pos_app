@@ -26,11 +26,6 @@ class AuthLocalDatasource {
     return authData != null;
   }
 
-  // Future<int?> getUserId() async {
-  //   final authData = await getAuthData();
-  //   return authData.user.id;
-  // }
-
   Future<void> saveMidtransServerKey(String serverKey) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('server_key', serverKey);
