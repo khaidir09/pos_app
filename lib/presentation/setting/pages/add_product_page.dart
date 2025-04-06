@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos_app/core/extensions/string_ext.dart';
+import 'package:flutter_pos_app/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_pos_app/data/models/response/auth_response_model.dart';
 import 'package:flutter_pos_app/presentation/setting/models/category_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -172,21 +173,24 @@ class _AddProductPageState extends State<AddProductPage> {
                       );
                     }, success: (_) {
                       return Button.filled(
-                        onPressed: () {
+                        onPressed: () async {
                           final String name = nameController!.text;
                           final int price =
                               priceController!.text.toIntegerFromText;
                           final int stock =
                               stockController!.text.toIntegerFromText;
+                          final authData =
+                              await AuthLocalDatasource().getAuthData();
                           final Product product = Product(
                               name: name,
                               price: price,
                               stock: stock,
                               category: category!.name,
                               categoryId: category!.id,
-                              userId: user!.id,
+                              userId: authData.user.id,
                               isBestSeller: isBestSeller,
                               image: imageFile!.path);
+
                           context.read<ProductBloc>().add(
                               ProductEvent.addProduct(product, imageFile!));
                         },

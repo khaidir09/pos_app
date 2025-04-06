@@ -73,6 +73,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         },
       );
 
+      print('Menerima event AddProduct');
+      print('Data Produk: ${event.product.toJson()}');
+
       emit(ProductState.success(products));
     });
 

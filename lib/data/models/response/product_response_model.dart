@@ -78,9 +78,7 @@ class Product {
             : json["category_id"],
         image: json["image"] ?? '',
         isBestSeller: json["is_best_seller"] == 1 ? true : false,
-        userId: json["user_id"] is String
-            ? int.parse(json["user_id"])
-            : json["user_id"],
+        userId: json["user_id"],
         // createdAt: DateTime.parse(json["created_at"]),
         // updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -153,7 +151,6 @@ class Product {
         other.category == category &&
         other.image == image &&
         other.isBestSeller == isBestSeller &&
-        // other.userId == userId &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
   }
@@ -166,7 +163,6 @@ class Product {
         price.hashCode ^
         stock.hashCode ^
         category.hashCode ^
-        // userId.hashCode ^
         image.hashCode ^
         isBestSeller.hashCode ^
         createdAt.hashCode ^
