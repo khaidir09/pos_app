@@ -1,3 +1,4 @@
+import 'package:flutter_pos_app/core/constants/variables.dart';
 import 'package:flutter_pos_app/data/models/response/auth_response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,7 +57,7 @@ class AuthLocalDatasource {
     if (authData != null) {
       try {
         final authModel = AuthResponseModel.fromJson(authData);
-        return authModel.user.namaToko;
+        return authModel.user.shop?.namaToko ?? 'Toko Saya';
       } catch (e) {
         return 'Toko Saya'; // Default value jika error
       }
@@ -72,9 +73,9 @@ class AuthLocalDatasource {
       try {
         final authModel = AuthResponseModel.fromJson(authData);
         return {
-          'name': authModel.user.namaToko,
-          'address':
-              authModel.user.alamat, // Ganti dengan field alamat jika ada
+          'nama_toko': authModel.user.shop?.namaToko ?? 'Toko Saya',
+          'alamat': authModel.user.shop?.alamat ??
+              'Alamat belum diatur', // Ganti dengan field alamat jika ada
         };
       } catch (e) {
         return {
@@ -87,5 +88,23 @@ class AuthLocalDatasource {
       'name': 'Toko Saya',
       'address': 'Alamat belum diatur',
     };
+  }
+
+  Future<String> getShopLogoUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    final authData = prefs.getString('auth_data');
+
+    if (authData != null) {
+      try {
+        final authModel = AuthResponseModel.fromJson(authData);
+        final logo = authModel.user.shop?.logo ?? '';
+        if (logo.isNotEmpty) {
+          return '${Variables.shopLogoUrl}/$logo'; // Sesuaikan path jika perlu
+        }
+      } catch (e) {
+        // Logging optional
+      }
+    }
+    return 'assets/images/logo.png'; // fallback logo
   }
 }

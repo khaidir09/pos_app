@@ -49,11 +49,11 @@ class _SyncDataPageState extends State<SyncDataPage> {
 
                   // Ambil userId dari auth data
                   final authData = await AuthLocalDatasource().getAuthData();
-                  final userId = authData.user.id;
+                  final shopId = authData.user.shopId;
 
                   await ProductLocalDatasource.instance.insertAllProduct(
                     _.products.toList(),
-                    userId: userId,
+                    shopId: shopId ?? 0,
                   );
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       backgroundColor: AppColors.primary,
@@ -130,11 +130,11 @@ class _SyncDataPageState extends State<SyncDataPage> {
 
                   // Ambil userId dari auth data
                   final authData = await AuthLocalDatasource().getAuthData();
-                  final userId = authData.user.id;
+                  final shopId = authData.user.shopId;
 
                   await ProductLocalDatasource.instance.insertAllCategories(
                     data.categories,
-                    userId: userId,
+                    shopId: shopId ?? 0,
                   );
                   context
                       .read<CategoryBloc>()

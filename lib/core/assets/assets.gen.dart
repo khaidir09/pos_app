@@ -130,6 +130,10 @@ class $AssetsImagesGen {
   AssetGenImage get manageQr =>
       const AssetGenImage('assets/images/manage_qr.png');
 
+  /// File path: assets/images/old-logo.png
+  AssetGenImage get oldLogo =>
+      const AssetGenImage('assets/images/old-logo.png');
+
   /// File path: assets/images/report.png
   AssetGenImage get report => const AssetGenImage('assets/images/report.png');
 
@@ -151,6 +155,7 @@ class $AssetsImagesGen {
         managePrinter,
         manageProduct,
         manageQr,
+        oldLogo,
         report,
         sync
       ];
@@ -162,8 +167,12 @@ class $AssetsLogoGen {
   /// File path: assets/logo/mylogo.png
   AssetGenImage get mylogo => const AssetGenImage('assets/logo/mylogo.png');
 
+  /// File path: assets/logo/old-mylogo.png
+  AssetGenImage get oldMylogo =>
+      const AssetGenImage('assets/logo/old-mylogo.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [mylogo];
+  List<AssetGenImage> get values => [mylogo, oldMylogo];
 }
 
 class Assets {

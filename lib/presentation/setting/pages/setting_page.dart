@@ -16,7 +16,6 @@ import '../../../core/components/menu_button.dart';
 import '../../../core/components/spaces.dart';
 import '../../home/bloc/logout/logout_bloc.dart';
 import '../bloc/sync_order/sync_order_bloc.dart';
-import 'manage_product_page.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -45,7 +44,8 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
         ),
-        body: Column(
+        body: SingleChildScrollView(
+            child: Column(
           children: [
             const SpaceHeight(20.0),
             Padding(
@@ -54,19 +54,13 @@ class _SettingPageState extends State<SettingPage> {
                 children: [
                   Flexible(
                     child: MenuButton(
-                      iconPath: Assets.images.manageProduct.path,
-                      label: 'Atur Produk',
-                      onPressed: () => context.push(const ManageProductPage()),
-                      isImage: true,
-                    ),
-                  ),
-                  const SpaceWidth(15.0),
-                  Flexible(
-                    child: MenuButton(
-                      iconPath: Assets.images.managePrinter.path,
-                      label: 'Atur Printer',
+                      iconPath: Assets.images.sync.path,
+                      label: 'Sinkronisasi Data',
                       onPressed: () {
-                        context.push(const ManagePrinterPage());
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SyncDataPage()));
                       },
                       isImage: true,
                     ),
@@ -90,13 +84,10 @@ class _SettingPageState extends State<SettingPage> {
                   const SpaceWidth(15.0),
                   Flexible(
                     child: MenuButton(
-                      iconPath: Assets.images.sync.path,
-                      label: 'Sinkronisasi Data',
+                      iconPath: Assets.images.managePrinter.path,
+                      label: 'Atur Printer',
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SyncDataPage()));
+                        context.push(const ManagePrinterPage());
                       },
                       isImage: true,
                     ),
@@ -223,6 +214,6 @@ class _SettingPageState extends State<SettingPage> {
             ),
             const Divider(),
           ],
-        ));
+        )));
   }
 }

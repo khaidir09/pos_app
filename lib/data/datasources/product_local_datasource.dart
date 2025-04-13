@@ -43,7 +43,7 @@ class ProductLocalDatasource {
         category_id INTEGER,
         is_best_seller INTEGER,
         is_sync INTEGER DEFAULT 0,
-        user_id INTEGER DEFAULT 0
+        shop_id INTEGER DEFAULT 0
       )
     ''');
 
@@ -66,7 +66,7 @@ class ProductLocalDatasource {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         category_id INTEGER,
         name TEXT,
-        user_id INTEGER DEFAULT 0
+        shop_id INTEGER DEFAULT 0
       )
     ''');
 
@@ -111,11 +111,11 @@ class ProductLocalDatasource {
 
   //insert all categories
   Future<void> insertAllCategories(List<Category> categories,
-      {required int userId}) async {
+      {required int shopId}) async {
     final db = await instance.database;
     for (var category in categories) {
       final data = category.toMap();
-      data['user_id'] = userId;
+      data['shop_id'] = shopId;
       await db.insert('categories', data);
     }
   }
@@ -267,11 +267,11 @@ class ProductLocalDatasource {
 
   //insert data product from list product
   Future<void> insertAllProduct(List<Product> products,
-      {required int userId}) async {
+      {required int shopId}) async {
     final db = await instance.database;
     for (var product in products) {
       final data = product.toLocalMap();
-      data['user_id'] = userId;
+      data['shop_id'] = shopId;
       await db.insert(tableProducts, data);
     }
   }

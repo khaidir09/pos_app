@@ -107,8 +107,8 @@ class _ReportPageState extends State<ReportPage> {
                     final pdfFile = await Invoice.generate(
                       productSales,
                       summary!,
-                      shopName: shopInfo['name'] ?? 'Toko Saya',
-                      shopAddress: shopInfo['address'] ?? 'Alamat belum diatur',
+                      shopName: shopInfo['nama_toko'] ?? 'Toko Saya',
+                      shopAddress: shopInfo['alamat'] ?? 'Alamat belum diatur',
                     );
                     log("pdfFile: $pdfFile");
                     HelperPdfService.openFile(pdfFile);

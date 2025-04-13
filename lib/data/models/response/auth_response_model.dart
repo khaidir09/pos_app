@@ -31,9 +31,8 @@ class User {
   final String name;
   final String email;
   final String phone;
-  final String roles;
-  final String namaToko;
-  final String alamat;
+  final int? shopId;
+  final ShopModel? shop;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -42,9 +41,8 @@ class User {
     required this.name,
     required this.email,
     required this.phone,
-    required this.roles,
-    required this.namaToko,
-    required this.alamat,
+    required this.shopId,
+    required this.shop,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -58,9 +56,8 @@ class User {
         name: json["name"],
         email: json["email"],
         phone: json["phone"] ?? '',
-        roles: json["roles"] ?? '',
-        namaToko: json["nama_toko"] ?? '',
-        alamat: json["alamat"] ?? '',
+        shopId: json["shop_id"],
+        shop: json["shop"] != null ? ShopModel.fromMap(json["shop"]) : null,
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -70,10 +67,41 @@ class User {
         "name": name,
         "email": email,
         "phone": phone,
-        "roles": roles,
-        "nama_toko": namaToko,
-        "alamat": alamat,
+        "shop_id": shopId,
+        "shop": shop?.toMap(),
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+      };
+}
+
+class ShopModel {
+  final int id;
+  final String namaToko;
+  final String alamat;
+  final String logo;
+
+  ShopModel({
+    required this.id,
+    required this.namaToko,
+    required this.alamat,
+    this.logo = '',
+  });
+
+  factory ShopModel.fromJson(String str) => ShopModel.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory ShopModel.fromMap(Map<String, dynamic> json) => ShopModel(
+        id: json["id"],
+        namaToko: json["nama_toko"],
+        alamat: json["alamat"],
+        logo: json["logo"] ?? '',
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "nama_toko": namaToko,
+        "alamat": alamat,
+        "logo": logo,
       };
 }

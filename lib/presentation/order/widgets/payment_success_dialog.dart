@@ -27,7 +27,7 @@ class PaymentSuccessDialog extends StatelessWidget {
           Center(child: Assets.icons.done.svg()),
           const SpaceHeight(24.0),
           const Text(
-            'Payment has been successfully',
+            'Pembayaran Berhasil',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
@@ -48,27 +48,27 @@ class PaymentSuccessDialog extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   LabelValue(
-                    label: 'Payment Method',
-                    value: paymentType == 'QRIS' ? 'QRIS' : 'Cash',
+                    label: 'Metode Pembayaran',
+                    value: paymentType == 'QRIS' ? 'QRIS' : 'Tunai',
                   ),
                   const Divider(height: 16.0),
                   LabelValue(
-                    label: 'Total Quantity',
+                    label: 'Jumlah Item',
                     value: qty.toString(),
                   ),
                   const Divider(height: 16.0),
                   LabelValue(
-                    label: 'Total Bill',
+                    label: 'Total Pembayaran',
                     value: total.currencyFormatRp,
                   ),
                   const Divider(height: 16.0),
                   LabelValue(
-                    label: 'Cashier Name',
+                    label: 'Nama kasir',
                     value: nameKasir,
                   ),
                   const Divider(height: 16.0),
                   LabelValue(
-                    label: 'Transaction Date',
+                    label: 'Tanggal Transaksi',
                     value: DateTime.now().toFormattedTime(),
                   ),
                   const SpaceHeight(20.0),
@@ -87,7 +87,7 @@ class PaymentSuccessDialog extends StatelessWidget {
                                 .add(const OrderEvent.started());
                             context.pushReplacement(const DashboardPage());
                           },
-                          label: 'Done',
+                          label: 'Selesai',
                           fontSize: 12,
                         ),
                       ),

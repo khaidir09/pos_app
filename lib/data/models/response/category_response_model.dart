@@ -33,12 +33,12 @@ class CategoryResponseModel {
 class Category {
   final int id;
   final String name;
-  final int userId;
+  final int shopId;
 
   Category({
     required this.id,
     required this.name,
-    required this.userId,
+    required this.shopId,
   });
 
   factory Category.fromJson(String str) => Category.fromMap(json.decode(str));
@@ -48,19 +48,19 @@ class Category {
   factory Category.fromMap(Map<String, dynamic> json) => Category(
         id: json["id"],
         name: json["name"],
-        userId: json["user_id"],
+        shopId: json["shop_id"],
       );
 
   factory Category.fromLocal(Map<String, dynamic> json) => Category(
         id: json["category_id"],
         name: json["name"],
-        userId: json["user_id"],
+        shopId: json["shop_id"],
       );
 
   Map<String, dynamic> toMap() => {
         "category_id": id,
         "name": name,
-        "user_id": userId,
+        "shop_id": shopId,
       };
 
   @override

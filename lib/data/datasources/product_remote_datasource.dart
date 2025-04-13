@@ -38,8 +38,8 @@ class ProductRemoteDatasource {
         'image', productRequestModel.image.path));
     request.headers.addAll(headers);
 
-    print('Request fields: ${request.fields}');
-    print('Image path: ${productRequestModel.image.path}');
+    // print('Request fields: ${request.fields}');
+    // print('Image path: ${productRequestModel.image.path}');
 
     http.StreamedResponse response = await request.send();
 

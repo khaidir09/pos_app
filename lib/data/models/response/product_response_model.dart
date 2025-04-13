@@ -39,7 +39,7 @@ class Product {
   final int stock;
   final String category;
   final int categoryId;
-  final int userId;
+  final int shopId;
   final String image;
   final bool isBestSeller;
   final DateTime? createdAt;
@@ -54,7 +54,7 @@ class Product {
     required this.stock,
     required this.category,
     required this.categoryId,
-    required this.userId,
+    required this.shopId,
     required this.image,
     this.isBestSeller = false,
     this.createdAt,
@@ -78,7 +78,7 @@ class Product {
             : json["category_id"],
         image: json["image"] ?? '',
         isBestSeller: json["is_best_seller"] == 1 ? true : false,
-        userId: json["user_id"],
+        shopId: json["shop_id"],
         // createdAt: DateTime.parse(json["created_at"]),
         // updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -89,7 +89,7 @@ class Product {
         "stock": stock,
         "category": category,
         "category_id": categoryId,
-        "user_id": userId,
+        "shop_id": shopId,
         "image": image,
         "is_best_seller": isBestSeller ? 1 : 0,
         "product_id": productId,
@@ -100,7 +100,7 @@ class Product {
         "stock": stock,
         "category": category,
         "category_id": categoryId,
-        "user_id": userId,
+        "shop_id": shopId,
         "image": image,
         "is_best_seller": isBestSeller ? 1 : 0,
         "product_id": id,
@@ -117,7 +117,7 @@ class Product {
     int? categoryId,
     String? image,
     bool? isBestSeller,
-    int? userId,
+    int? shopId,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -130,7 +130,7 @@ class Product {
       stock: stock ?? this.stock,
       category: category ?? this.category,
       categoryId: categoryId ?? this.categoryId,
-      userId: userId ?? this.userId,
+      shopId: shopId ?? this.shopId,
       image: image ?? this.image,
       isBestSeller: isBestSeller ?? this.isBestSeller,
       createdAt: createdAt ?? this.createdAt,

@@ -16,6 +16,7 @@ class AuthRemoteDatasource {
         'password': password,
       },
     );
+
     if (response.statusCode == 200) {
       return right(AuthResponseModel.fromJson(response.body));
     } else {

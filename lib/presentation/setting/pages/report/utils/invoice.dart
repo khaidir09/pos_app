@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_pos_app/core/extensions/int_ext.dart';
 import 'package:flutter_pos_app/core/extensions/string_ext.dart';
+import 'package:flutter_pos_app/data/datasources/auth_local_datasource.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:http/http.dart' as http;
 
 import '../../../../../data/models/response/product_sales_report.dart';
 import '../../../../../data/models/response/summary_response_model.dart';
@@ -21,8 +23,14 @@ class Invoice {
     final pdf = Document();
     // var data = await rootBundle.load("assets/fonts/noto-sans.ttf");
     // ttf = Font.ttf(data);
-    final ByteData dataImage = await rootBundle.load('assets/images/logo.png');
-    final Uint8List bytes = dataImage.buffer.asUint8List();
+    final logoUrl = await AuthLocalDatasource().getShopLogoUrl();
+    print('Logo URL: $logoUrl');
+
+    final response = await http.get(Uri.parse(logoUrl));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load logo');
+    }
+    final Uint8List bytes = response.bodyBytes;
 
     // Membuat objek Image dari gambar
     final image = pw.MemoryImage(bytes);
@@ -84,7 +92,7 @@ class Invoice {
           image,
           width: 80.0,
           height: 80.0,
-          fit: BoxFit.fill,
+          fit: BoxFit.contain,
         ),
       ]);
 
