@@ -16,7 +16,7 @@ import '../../../data/dataoutputs/cwb_print.dart';
 import '../bloc/order/order_bloc.dart';
 import '../widgets/order_card.dart';
 import '../widgets/payment_cash_dialog.dart';
-import '../widgets/payment_qris_dialog.dart';
+// import '../widgets/payment_qris_dialog.dart';
 import '../widgets/process_button.dart';
 
 class OrderPage extends StatefulWidget {
@@ -151,7 +151,7 @@ class _OrderPageState extends State<OrderPage> {
                                     context
                                         .pushReplacement(const DashboardPage());
                                   },
-                                  label: 'Simpan',
+                                  label: 'Simpan & Cetak',
                                   fontSize: 14,
                                   height: 40,
                                   width: 140,
@@ -222,7 +222,7 @@ class _OrderPageState extends State<OrderPage> {
                           Flexible(
                             child: MenuButton(
                               iconPath: Assets.icons.cash.path,
-                              label: 'CASH',
+                              label: 'TUNAI',
                               isActive: value == 1,
                               onPressed: () {
                                 indexValue.value = 1;
@@ -254,6 +254,9 @@ class _OrderPageState extends State<OrderPage> {
                               isActive: value == 3,
                               onPressed: () {
                                 indexValue.value = 3;
+                                context.read<OrderBloc>().add(
+                                    OrderEvent.addPaymentMethod(
+                                        'Transfer', data, draftName));
                               },
                             ),
                           ),
@@ -268,23 +271,22 @@ class _OrderPageState extends State<OrderPage> {
             ProcessButton(
               price: 0,
               onPressed: () async {
-                if (indexValue.value == 0) {
-                } else if (indexValue.value == 1) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => PaymentCashDialog(
-                      price: totalPrice,
-                    ),
-                  );
-                } else if (indexValue.value == 2) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => PaymentQrisDialog(
-                      price: totalPrice,
-                    ),
-                  );
-                }
+                if (indexValue.value == 0) return;
+
+                String paymentMethod = switch (indexValue.value) {
+                  1 => 'Tunai',
+                  2 => 'QRIS',
+                  3 => 'Transfer',
+                  _ => 'Tunai',
+                };
+
+                showDialog(
+                  context: context,
+                  builder: (context) => PaymentCashDialog(
+                    price: totalPrice,
+                    paymentMethod: paymentMethod,
+                  ),
+                );
               },
             ),
           ],

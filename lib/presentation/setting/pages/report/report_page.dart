@@ -318,14 +318,14 @@ class _ReportPageState extends State<ReportPage> {
                                         ),
                                         const Spacer(),
                                         Text(
-                                          "$totalQty",
+                                          "$totalQty item",
                                           style: const TextStyle(
                                               color: AppColors.primary,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         const SpaceWidth(24),
                                         Text(
-                                          "$totalPrice",
+                                          totalPrice.currencyFormatRp,
                                           style: const TextStyle(
                                               color: AppColors.primary,
                                               fontWeight: FontWeight.bold),

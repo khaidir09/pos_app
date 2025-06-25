@@ -16,6 +16,31 @@ import 'helper_pdf_service.dart';
 
 class Invoice {
   static late Font ttf;
+
+  static Future<pw.Widget> buildPdfLogo(String logoPath) async {
+    try {
+      if (logoPath.startsWith('http')) {
+        // Load dari URL
+        final response = await http.get(Uri.parse(logoPath));
+        if (response.statusCode == 200) {
+          final image = pw.MemoryImage(response.bodyBytes);
+          return pw.Image(image,
+              width: 80.0, height: 80.0, fit: pw.BoxFit.contain);
+        } else {
+          throw Exception('Failed to load logo from network');
+        }
+      } else {
+        // Load dari assets lokal
+        final ByteData bytes = await rootBundle.load(logoPath);
+        final image = pw.MemoryImage(bytes.buffer.asUint8List());
+        return pw.Image(image,
+            width: 80.0, height: 80.0, fit: pw.BoxFit.contain);
+      }
+    } catch (e) {
+      return pw.Text('Logo tidak tersedia');
+    }
+  }
+
   static Future<File> generate(List<ProductSales> itemSales, Summary summary,
       {required String shopName,
       required String shopAddress} // Tambahkan named parameters
@@ -23,22 +48,16 @@ class Invoice {
     final pdf = Document();
     // var data = await rootBundle.load("assets/fonts/noto-sans.ttf");
     // ttf = Font.ttf(data);
-    final logoUrl = await AuthLocalDatasource().getShopLogoUrl();
-    print('Logo URL: $logoUrl');
 
-    final response = await http.get(Uri.parse(logoUrl));
-    if (response.statusCode != 200) {
-      throw Exception('Failed to load logo');
-    }
-    final Uint8List bytes = response.bodyBytes;
+    final logoPath = await AuthLocalDatasource().getShopLogoUrl();
+    print('Logo Path: $logoPath');
 
-    // Membuat objek Image dari gambar
-    final image = pw.MemoryImage(bytes);
+    final logoWidget = await buildPdfLogo(logoPath);
 
     pdf.addPage(
       MultiPage(
         build: (context) => [
-          buildHeader(image, shopName),
+          buildHeader(logoWidget, shopName),
           SizedBox(height: 1 * PdfPageFormat.cm),
           Text('Ringkasan',
               style: TextStyle(
@@ -69,7 +88,7 @@ class Invoice {
   }
 
   static Widget buildHeader(
-    MemoryImage image,
+    pw.Widget logoWidget,
     String shopName, // Terima nama toko sebagai parameter
   ) =>
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -88,12 +107,7 @@ class Invoice {
             ),
           ],
         ),
-        Image(
-          image,
-          width: 80.0,
-          height: 80.0,
-          fit: BoxFit.contain,
-        ),
+        logoWidget
       ]);
 
   static Widget buildSummary(Summary summary) {

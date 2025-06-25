@@ -43,7 +43,7 @@ class HistoryTransactionCard extends StatelessWidget {
               Assets.icons.payments.svg(),
               const SizedBox(width: 12.0),
               Text(
-                '${data.transactionTime.toFormattedTime} - ${data.paymentMethod == 'QRIS' ? 'QRIS' : 'Cash'}',
+                '${data.transactionTime.toFormattedTime} - ${data.paymentMethod}',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,

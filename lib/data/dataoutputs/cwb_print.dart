@@ -34,20 +34,7 @@ class CwbPrint {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
 
-    final ByteData data = await rootBundle.load('assets/logo/mylogo.png');
-    final Uint8List bytesData = data.buffer.asUint8List();
-    final img.Image? orginalImage = img.decodeImage(bytesData);
-    bytes += generator.reset();
-
-    if (orginalImage != null) {
-      final img.Image grayscalledImage = img.grayscale(orginalImage);
-      final img.Image resizedImage =
-          img.copyResize(grayscalledImage, width: 240);
-      bytes += generator.imageRaster(resizedImage, align: PosAlign.center);
-      bytes += generator.feed(2);
-    }
-
-    bytes += generator.text('Coffee With Bahri',
+    bytes += generator.text('Kasir UMKM by Dewa Kreatif',
         styles: const PosStyles(
           bold: true,
           align: PosAlign.center,
@@ -55,7 +42,7 @@ class CwbPrint {
           width: PosTextSize.size1,
         ));
 
-    bytes += generator.text('Flutter Street, Dart 2024',
+    bytes += generator.text('Jl. Negara Dipa RT.8 Kel.Sungai Malang',
         styles: const PosStyles(bold: false, align: PosAlign.center));
     bytes += generator.text(
         'Date : ${DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now())}',
@@ -167,7 +154,7 @@ class CwbPrint {
         styles: const PosStyles(bold: false, align: PosAlign.left));
     //reciept number
     bytes += generator.text(
-        'Receipt: JF-${DateFormat('yyyyMMddhhmm').format(DateTime.now())}',
+        'Receipt: KU-${DateFormat('yyyyMMddhhmm').format(DateTime.now())}',
         styles: const PosStyles(bold: false, align: PosAlign.left));
 //cashier name
     bytes += generator.text('Cashier: $cashierName',
@@ -223,20 +210,7 @@ class CwbPrint {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
 
-    final ByteData data = await rootBundle.load('assets/logo/mylogo.png');
-    final Uint8List bytesData = data.buffer.asUint8List();
-    final img.Image? orginalImage = img.decodeImage(bytesData);
-    bytes += generator.reset();
-
-    if (orginalImage != null) {
-      final img.Image grayscalledImage = img.grayscale(orginalImage);
-      final img.Image resizedImage =
-          img.copyResize(grayscalledImage, width: 240);
-      bytes += generator.imageRaster(resizedImage, align: PosAlign.center);
-      bytes += generator.feed(3);
-    }
-
-    bytes += generator.text('Coffee With Bahri Palagan',
+    bytes += generator.text('Bakso Tetelan Emnur',
         styles: const PosStyles(
           bold: true,
           align: PosAlign.center,
@@ -244,13 +218,10 @@ class CwbPrint {
           width: PosTextSize.size1,
         ));
 
-    bytes += generator.text('Jl. Palagan Tentara Pelajar No.2',
+    bytes += generator.text(
+        'Jl. Brigjen H.Hasan Basri RT.3 (Dekat RS Pembalah Batung)',
         styles: const PosStyles(bold: false, align: PosAlign.center));
-    bytes += generator.text('Kab. Sleman, DI Yogyakarta',
-        styles: const PosStyles(bold: false, align: PosAlign.center));
-    bytes += generator.text('coffeewithbahri@gmail.com',
-        styles: const PosStyles(bold: false, align: PosAlign.center));
-    bytes += generator.text('085640899224',
+    bytes += generator.text('085166613149',
         styles: const PosStyles(bold: false, align: PosAlign.center));
 
     bytes += generator.feed(1);
@@ -270,7 +241,7 @@ class CwbPrint {
         styles: const PosStyles(align: PosAlign.left),
       ),
       PosColumn(
-        text: 'JF-${DateFormat('yyyyMMddhhmm').format(DateTime.now())}',
+        text: 'KU-${DateFormat('yyyyMMddhhmm').format(DateTime.now())}',
         width: 6,
         styles: const PosStyles(align: PosAlign.left),
       ),
@@ -400,11 +371,6 @@ class CwbPrint {
       ),
     ]);
     bytes += generator.text('================================',
-        styles: const PosStyles(bold: false, align: PosAlign.center));
-    bytes += generator.text('Password: fic11jilid2',
-        styles: const PosStyles(bold: false, align: PosAlign.center));
-    bytes += generator.feed(1);
-    bytes += generator.text('instagram: @codewithbahri',
         styles: const PosStyles(bold: false, align: PosAlign.center));
     bytes += generator.feed(1);
     bytes += generator.text(

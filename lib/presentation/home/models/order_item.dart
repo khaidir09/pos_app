@@ -37,7 +37,8 @@ class OrderItem {
     return OrderItemModel(
       productId: map['id_product']?.toInt() ?? 0,
       quantity: map['quantity']?.toInt() ?? 0,
-      totalPrice: map['price']?.toInt() ?? 0 * (map['quantity']?.toInt() ?? 0),
+      totalPrice:
+          (map['price']?.toInt() ?? 0) * (map['quantity']?.toInt() ?? 0),
     );
   }
 

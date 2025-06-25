@@ -46,7 +46,7 @@ class OrderRequestModel {
 class OrderItemModel {
   final int productId;
   final int quantity;
-  final int totalPrice;
+  final int? totalPrice;
 
   OrderItemModel({
     required this.productId,
@@ -68,6 +68,6 @@ class OrderItemModel {
   Map<String, dynamic> toMap() => {
         "product_id": productId,
         "quantity": quantity,
-        "total_price": totalPrice,
+        // "total_price": totalPrice,
       };
 }

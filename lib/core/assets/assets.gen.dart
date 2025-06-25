@@ -19,6 +19,9 @@ class $AssetsIconsGen {
   SvgGenImage get allCategories =>
       const SvgGenImage('assets/icons/all_categories.svg');
 
+  /// File path: assets/icons/app_icon.png
+  AssetGenImage get appIcon => const AssetGenImage('assets/icons/app_icon.png');
+
   /// File path: assets/icons/cash.svg
   SvgGenImage get cash => const SvgGenImage('assets/icons/cash.svg');
 
@@ -65,8 +68,9 @@ class $AssetsIconsGen {
   SvgGenImage get snack => const SvgGenImage('assets/icons/snack.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
         allCategories,
+        appIcon,
         cash,
         dashboard,
         debit,

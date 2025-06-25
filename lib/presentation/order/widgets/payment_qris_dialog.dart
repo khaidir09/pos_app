@@ -129,6 +129,9 @@ class _PaymentQrisDialogState extends State<PaymentQrisDialog> {
                                 return const SizedBox();
                               },
                               qrisResponse: (data) {
+                                print("QRIS data: ${data.toString()}");
+                                print("QRIS actions: ${data.actions}");
+
                                 return WidgetsToImage(
                                   controller: controller,
                                   child: Container(
@@ -139,9 +142,16 @@ class _PaymentQrisDialogState extends State<PaymentQrisDialog> {
                                       color: Colors.white,
                                     ),
                                     child: Center(
-                                      child: Image.network(
-                                        data.actions!.first.url!,
-                                      ),
+                                      child: (data.actions != null &&
+                                              data.actions!.isNotEmpty)
+                                          ? Image.network(
+                                              data.actions!.first.url!,
+                                            )
+                                          : const Text(
+                                              "QRIS tidak tersedia",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
                                     ),
                                   ),
                                 );

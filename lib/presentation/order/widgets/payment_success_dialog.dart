@@ -49,7 +49,7 @@ class PaymentSuccessDialog extends StatelessWidget {
                 children: [
                   LabelValue(
                     label: 'Metode Pembayaran',
-                    value: paymentType == 'QRIS' ? 'QRIS' : 'Tunai',
+                    value: paymentType,
                   ),
                   const Divider(height: 16.0),
                   LabelValue(

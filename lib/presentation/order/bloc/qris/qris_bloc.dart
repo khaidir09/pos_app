@@ -20,6 +20,9 @@ class QrisBloc extends Bloc<QrisEvent, QrisState> {
       final response = await midtransRemoteDatasource.generateQRCode(
           event.orderId, event.grossAmount);
 
+      print("Response dari Midtrans:");
+      print(response); // jika menggunakan http package
+
       emit(QrisState.qrisResponse(response));
     });
 

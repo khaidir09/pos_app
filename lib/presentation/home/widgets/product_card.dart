@@ -106,6 +106,26 @@ class ProductCard extends StatelessWidget {
             ),
           ),
         ),
+
+        // Best Seller Badge
+        if (data.isBestSeller)
+          Positioned(
+            top: 8,
+            left: 8,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.star,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ),
+
         BlocBuilder<CheckoutBloc, CheckoutState>(
           builder: (context, state) {
             return state.maybeWhen(

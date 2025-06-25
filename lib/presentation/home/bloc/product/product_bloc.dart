@@ -23,7 +23,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         (l) => emit(ProductState.error(l)),
         (r) {
           products = r.data;
-          emit(ProductState.success(r.data));
+
+          // 🔽 Urutkan isBestSeller = true di atas
+          products.sort((a, b) {
+            // dari besar ke kecil: true (1) tampil di awal
+            return (b.isBestSeller ? 1 : 0).compareTo(a.isBestSeller ? 1 : 0);
+          });
+
+          emit(ProductState.success(products));
         },
       );
     });
@@ -33,6 +40,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final localPproducts =
           await ProductLocalDatasource.instance.getAllProduct();
       products = localPproducts;
+      products.sort(
+          (a, b) => (b.isBestSeller ? 1 : 0).compareTo(a.isBestSeller ? 1 : 0));
 
       emit(ProductState.success(products));
     });
@@ -46,6 +55,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
               .where((element) => element.category == event.category)
               .toList();
 
+      newProducts.sort(
+          (a, b) => (b.isBestSeller ? 1 : 0).compareTo(a.isBestSeller ? 1 : 0));
+
       emit(ProductState.success(newProducts));
     });
 
@@ -55,6 +67,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           .where((element) =>
               element.name.toLowerCase().contains(event.query.toLowerCase()))
           .toList();
+
+      newProducts.sort(
+          (a, b) => (b.isBestSeller ? 1 : 0).compareTo(a.isBestSeller ? 1 : 0));
 
       emit(ProductState.success(newProducts));
     });

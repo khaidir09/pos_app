@@ -144,11 +144,14 @@ class Product {
 
     return other is Product &&
         other.id == id &&
+        other.productId == productId && // Ditambahkan
         other.name == name &&
         other.description == description &&
         other.price == price &&
         other.stock == stock &&
         other.category == category &&
+        other.categoryId == categoryId && // Ditambahkan
+        other.shopId == shopId && // Ditambahkan
         other.image == image &&
         other.isBestSeller == isBestSeller &&
         other.createdAt == createdAt &&
@@ -158,11 +161,14 @@ class Product {
   @override
   int get hashCode {
     return id.hashCode ^
+        productId.hashCode ^ // Ditambahkan
         name.hashCode ^
         description.hashCode ^
         price.hashCode ^
         stock.hashCode ^
         category.hashCode ^
+        categoryId.hashCode ^ // Ditambahkan
+        shopId.hashCode ^ // Ditambahkan
         image.hashCode ^
         isBestSeller.hashCode ^
         createdAt.hashCode ^

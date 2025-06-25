@@ -79,11 +79,15 @@ class ShopModel {
   final String namaToko;
   final String alamat;
   final String logo;
+  final String email;
+  final String nomorHp;
 
   ShopModel({
     required this.id,
     required this.namaToko,
     required this.alamat,
+    required this.email,
+    required this.nomorHp,
     this.logo = '',
   });
 
@@ -96,6 +100,8 @@ class ShopModel {
         namaToko: json["nama_toko"],
         alamat: json["alamat"],
         logo: json["logo"] ?? '',
+        email: json["email"],
+        nomorHp: json["nomor_hp"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -103,5 +109,7 @@ class ShopModel {
         "nama_toko": namaToko,
         "alamat": alamat,
         "logo": logo,
+        "email": email,
+        "nomor_hp": nomorHp,
       };
 }

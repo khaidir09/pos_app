@@ -16,7 +16,12 @@ import '../../../core/constants/colors.dart';
 
 class PaymentCashDialog extends StatefulWidget {
   final int price;
-  const PaymentCashDialog({super.key, required this.price});
+  final String paymentMethod; // Tambahkan ini
+  const PaymentCashDialog({
+    super.key,
+    required this.price,
+    required this.paymentMethod,
+  });
 
   @override
   State<PaymentCashDialog> createState() => _PaymentCashDialogState();
@@ -44,11 +49,11 @@ class _PaymentCashDialogState extends State<PaymentCashDialog> {
             icon: const Icon(Icons.highlight_off),
             color: AppColors.primary,
           ),
-          const Center(
+          Center(
             child: Padding(
               padding: EdgeInsets.only(top: 12.0),
               child: Text(
-                'Pembayaran - Cash',
+                'Pembayaran - ${widget.paymentMethod}',
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 16,
