@@ -74,7 +74,7 @@ class _PaymentQrisDialogState extends State<PaymentQrisDialog> {
                   child: CircularProgressIndicator(),
                 );
               }, success: (data, qty, total, paymentMethod, nominal, idKasir,
-                  namaKasir, customerName) {
+                  namaKasir, customerName, transactionId) {
                 return Container(
                   width: context.deviceWidth,
                   padding: const EdgeInsets.all(14.0),
@@ -108,6 +108,7 @@ class _PaymentQrisDialogState extends State<PaymentQrisDialog> {
                                 totalPrice: total,
                                 idKasir: idKasir,
                                 namaKasir: namaKasir,
+                                transactionId: transactionId,
                                 transactionTime:
                                     DateFormat('yyyy-MM-ddTHH:mm:ss')
                                         .format(DateTime.now()),

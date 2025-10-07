@@ -4,6 +4,7 @@ import '../../home/models/order_item.dart';
 
 class OrderModel {
   final int? id;
+  final String transactionId;
   final String paymentMethod;
   final int nominalBayar;
   final List<OrderItem> orders;
@@ -15,6 +16,7 @@ class OrderModel {
   final bool isSync;
   OrderModel({
     this.id,
+    required this.transactionId,
     required this.paymentMethod,
     required this.nominalBayar,
     required this.orders,
@@ -28,6 +30,7 @@ class OrderModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'transactionId': transactionId,
       'paymentMethod': paymentMethod,
       'nominalBayar': nominalBayar,
       'orders': orders.map((x) => x.toMap()).toList(),
@@ -48,6 +51,7 @@ class OrderModel {
 
   Map<String, dynamic> toMapForLocal() {
     return {
+      'transaction_id': transactionId,
       'payment_method': paymentMethod,
       'total_item': totalQuantity,
       'nominal': totalPrice,
@@ -60,6 +64,7 @@ class OrderModel {
 
   factory OrderModel.fromLocalMap(Map<String, dynamic> map) {
     return OrderModel(
+      transactionId: map['transaction_id'] ?? '',
       paymentMethod: map['payment_method'] ?? '',
       nominalBayar: map['nominal']?.toInt() ?? 0,
       orders: [],
@@ -76,6 +81,7 @@ class OrderModel {
   factory OrderModel.newFromLocalMap(
       Map<String, dynamic> map, List<OrderItem> orders) {
     return OrderModel(
+      transactionId: map['transaction_id'] ?? '',
       paymentMethod: map['payment_method'] ?? '',
       nominalBayar: map['nominal']?.toInt() ?? 0,
       orders: orders,
@@ -91,6 +97,7 @@ class OrderModel {
 
   factory OrderModel.fromMap(Map<String, dynamic> map) {
     return OrderModel(
+      transactionId: map['transaction_id'] ?? '',
       paymentMethod: map['paymentMethod'] ?? '',
       nominalBayar: map['nominalBayar']?.toInt() ?? 0,
       orders:

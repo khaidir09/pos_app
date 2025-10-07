@@ -559,7 +559,8 @@ mixin _$OrderState {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)
+            String customerName,
+            String transactionId)
         success,
     required TResult Function(String message) error,
   }) =>
@@ -576,7 +577,8 @@ mixin _$OrderState {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult? Function(String message)? error,
   }) =>
@@ -593,7 +595,8 @@ mixin _$OrderState {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -698,7 +701,8 @@ class _$InitialImpl implements _Initial {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)
+            String customerName,
+            String transactionId)
         success,
     required TResult Function(String message) error,
   }) {
@@ -718,7 +722,8 @@ class _$InitialImpl implements _Initial {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult? Function(String message)? error,
   }) {
@@ -738,7 +743,8 @@ class _$InitialImpl implements _Initial {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -842,7 +848,8 @@ class _$LoadingImpl implements _Loading {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)
+            String customerName,
+            String transactionId)
         success,
     required TResult Function(String message) error,
   }) {
@@ -862,7 +869,8 @@ class _$LoadingImpl implements _Loading {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult? Function(String message)? error,
   }) {
@@ -882,7 +890,8 @@ class _$LoadingImpl implements _Loading {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -949,7 +958,8 @@ abstract class _$$SuccessImplCopyWith<$Res> {
       int nominalBayar,
       int idKasir,
       String namaKasir,
-      String customerName});
+      String customerName,
+      String transactionId});
 }
 
 /// @nodoc
@@ -973,39 +983,44 @@ class __$$SuccessImplCopyWithImpl<$Res>
     Object? idKasir = null,
     Object? namaKasir = null,
     Object? customerName = null,
+    Object? transactionId = null,
   }) {
     return _then(_$SuccessImpl(
-      null == products
+      products: null == products
           ? _value._products
           : products // ignore: cast_nullable_to_non_nullable
               as List<OrderItem>,
-      null == totalQuantity
+      totalQuantity: null == totalQuantity
           ? _value.totalQuantity
           : totalQuantity // ignore: cast_nullable_to_non_nullable
               as int,
-      null == totalPrice
+      totalPrice: null == totalPrice
           ? _value.totalPrice
           : totalPrice // ignore: cast_nullable_to_non_nullable
               as int,
-      null == paymentMethod
+      paymentMethod: null == paymentMethod
           ? _value.paymentMethod
           : paymentMethod // ignore: cast_nullable_to_non_nullable
               as String,
-      null == nominalBayar
+      nominalBayar: null == nominalBayar
           ? _value.nominalBayar
           : nominalBayar // ignore: cast_nullable_to_non_nullable
               as int,
-      null == idKasir
+      idKasir: null == idKasir
           ? _value.idKasir
           : idKasir // ignore: cast_nullable_to_non_nullable
               as int,
-      null == namaKasir
+      namaKasir: null == namaKasir
           ? _value.namaKasir
           : namaKasir // ignore: cast_nullable_to_non_nullable
               as String,
-      null == customerName
+      customerName: null == customerName
           ? _value.customerName
           : customerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      transactionId: null == transactionId
+          ? _value.transactionId
+          : transactionId // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -1015,14 +1030,15 @@ class __$$SuccessImplCopyWithImpl<$Res>
 
 class _$SuccessImpl implements _Success {
   const _$SuccessImpl(
-      final List<OrderItem> products,
-      this.totalQuantity,
-      this.totalPrice,
-      this.paymentMethod,
-      this.nominalBayar,
-      this.idKasir,
-      this.namaKasir,
-      this.customerName)
+      {required final List<OrderItem> products,
+      required this.totalQuantity,
+      required this.totalPrice,
+      required this.paymentMethod,
+      required this.nominalBayar,
+      required this.idKasir,
+      required this.namaKasir,
+      required this.customerName,
+      required this.transactionId})
       : _products = products;
 
   final List<OrderItem> _products;
@@ -1047,10 +1063,12 @@ class _$SuccessImpl implements _Success {
   final String namaKasir;
   @override
   final String customerName;
+  @override
+  final String transactionId;
 
   @override
   String toString() {
-    return 'OrderState.success(products: $products, totalQuantity: $totalQuantity, totalPrice: $totalPrice, paymentMethod: $paymentMethod, nominalBayar: $nominalBayar, idKasir: $idKasir, namaKasir: $namaKasir, customerName: $customerName)';
+    return 'OrderState.success(products: $products, totalQuantity: $totalQuantity, totalPrice: $totalPrice, paymentMethod: $paymentMethod, nominalBayar: $nominalBayar, idKasir: $idKasir, namaKasir: $namaKasir, customerName: $customerName, transactionId: $transactionId)';
   }
 
   @override
@@ -1071,7 +1089,9 @@ class _$SuccessImpl implements _Success {
             (identical(other.namaKasir, namaKasir) ||
                 other.namaKasir == namaKasir) &&
             (identical(other.customerName, customerName) ||
-                other.customerName == customerName));
+                other.customerName == customerName) &&
+            (identical(other.transactionId, transactionId) ||
+                other.transactionId == transactionId));
   }
 
   @override
@@ -1084,7 +1104,8 @@ class _$SuccessImpl implements _Success {
       nominalBayar,
       idKasir,
       namaKasir,
-      customerName);
+      customerName,
+      transactionId);
 
   /// Create a copy of OrderState
   /// with the given fields replaced by the non-null parameter values.
@@ -1107,12 +1128,13 @@ class _$SuccessImpl implements _Success {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)
+            String customerName,
+            String transactionId)
         success,
     required TResult Function(String message) error,
   }) {
     return success(products, totalQuantity, totalPrice, paymentMethod,
-        nominalBayar, idKasir, namaKasir, customerName);
+        nominalBayar, idKasir, namaKasir, customerName, transactionId);
   }
 
   @override
@@ -1128,12 +1150,13 @@ class _$SuccessImpl implements _Success {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult? Function(String message)? error,
   }) {
     return success?.call(products, totalQuantity, totalPrice, paymentMethod,
-        nominalBayar, idKasir, namaKasir, customerName);
+        nominalBayar, idKasir, namaKasir, customerName, transactionId);
   }
 
   @override
@@ -1149,14 +1172,15 @@ class _$SuccessImpl implements _Success {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
       return success(products, totalQuantity, totalPrice, paymentMethod,
-          nominalBayar, idKasir, namaKasir, customerName);
+          nominalBayar, idKasir, namaKasir, customerName, transactionId);
     }
     return orElse();
   }
@@ -1201,14 +1225,15 @@ class _$SuccessImpl implements _Success {
 
 abstract class _Success implements OrderState {
   const factory _Success(
-      final List<OrderItem> products,
-      final int totalQuantity,
-      final int totalPrice,
-      final String paymentMethod,
-      final int nominalBayar,
-      final int idKasir,
-      final String namaKasir,
-      final String customerName) = _$SuccessImpl;
+      {required final List<OrderItem> products,
+      required final int totalQuantity,
+      required final int totalPrice,
+      required final String paymentMethod,
+      required final int nominalBayar,
+      required final int idKasir,
+      required final String namaKasir,
+      required final String customerName,
+      required final String transactionId}) = _$SuccessImpl;
 
   List<OrderItem> get products;
   int get totalQuantity;
@@ -1218,6 +1243,7 @@ abstract class _Success implements OrderState {
   int get idKasir;
   String get namaKasir;
   String get customerName;
+  String get transactionId;
 
   /// Create a copy of OrderState
   /// with the given fields replaced by the non-null parameter values.
@@ -1304,7 +1330,8 @@ class _$ErrorImpl implements _Error {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)
+            String customerName,
+            String transactionId)
         success,
     required TResult Function(String message) error,
   }) {
@@ -1324,7 +1351,8 @@ class _$ErrorImpl implements _Error {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult? Function(String message)? error,
   }) {
@@ -1344,7 +1372,8 @@ class _$ErrorImpl implements _Error {
             int nominalBayar,
             int idKasir,
             String namaKasir,
-            String customerName)?
+            String customerName,
+            String transactionId)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),

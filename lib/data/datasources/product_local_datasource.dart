@@ -24,10 +24,60 @@ class ProductLocalDatasource {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
-      // onUpgrade: _upgradeDB,
+      onUpgrade: _upgradeDB,
     );
+  }
+
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      try {
+        // Backup data lama
+        final List<Map<String, dynamic>> oldOrders = await db.query('orders');
+
+        // Drop table lama
+        await db.execute('DROP TABLE IF EXISTS orders');
+
+        // Buat ulang table dengan struktur baru
+        await db.execute('''
+          CREATE TABLE orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            transaction_id TEXT UNIQUE,
+            nominal INTEGER,
+            payment_method TEXT,
+            total_item INTEGER,
+            id_kasir INTEGER,
+            nama_kasir TEXT,
+            transaction_time TEXT,
+            is_sync INTEGER DEFAULT 0
+          )
+        ''');
+
+        // Restore data lama dengan menambahkan transaction_id default
+        for (var order in oldOrders) {
+          final newOrder = Map<String, dynamic>.from(order);
+          newOrder['transaction_id'] = 'TRX-MIGRATED-${order['id']}';
+          await db.insert('orders', newOrder);
+        }
+      } catch (e) {
+        print('Migration error: $e');
+        // Jika gagal migrasi, buat table baru
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            transaction_id TEXT UNIQUE,
+            nominal INTEGER,
+            payment_method TEXT,
+            total_item INTEGER,
+            id_kasir INTEGER,
+            nama_kasir TEXT,
+            transaction_time TEXT,
+            is_sync INTEGER DEFAULT 0
+          )
+        ''');
+      }
+    }
   }
 
   Future<void> _createDB(Database db, int version) async {
@@ -50,6 +100,7 @@ class ProductLocalDatasource {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        transaction_id TEXT UNIQUE,
         nominal INTEGER,
         payment_method TEXT,
         total_item INTEGER,
@@ -137,13 +188,42 @@ class ProductLocalDatasource {
   //save order
   Future<int> saveOrder(OrderModel order) async {
     final db = await instance.database;
-    final orderMap = order.toMapForLocal();
-    int id = await db.insert('orders', orderMap);
 
-    for (var orderItem in order.orders) {
-      await db.insert('order_items', orderItem.toMapForLocal(id));
+    try {
+      // Check if transaction_id already exists
+      final existing = await db.query(
+        'orders',
+        where: 'transaction_id = ?',
+        whereArgs: [order.transactionId],
+      );
+
+      print('=== SAVING ORDER TO DATABASE ===');
+      print('Transaction ID: ${order.transactionId}');
+
+      if (existing.isNotEmpty) {
+        print('Order already exists with ID: ${existing.first['id']}');
+        return existing.first['id'] as int;
+      }
+
+      // Insert new order
+      final orderMap = order.toMapForLocal();
+      final id = await db.insert('orders', orderMap);
+
+      print('New order saved with ID: $id');
+      print('Order details: ${orderMap.toString()}');
+
+      // Insert order items
+      for (var orderItem in order.orders) {
+        final itemId =
+            await db.insert('order_items', orderItem.toMapForLocal(id));
+        print('Saved order item with ID: $itemId');
+      }
+      print('=== ORDER SAVED SUCCESSFULLY ===');
+      return id;
+    } catch (e) {
+      print('Save order error: $e');
+      rethrow;
     }
-    return id;
   }
 
   //save draft order

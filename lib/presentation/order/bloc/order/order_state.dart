@@ -4,15 +4,16 @@ part of 'order_bloc.dart';
 class OrderState with _$OrderState {
   const factory OrderState.initial() = _Initial;
   const factory OrderState.loading() = _Loading;
-  const factory OrderState.success(
-    List<OrderItem> products,
-    int totalQuantity,
-    int totalPrice,
-    String paymentMethod,
-    int nominalBayar,
-    int idKasir,
-    String namaKasir,
-    String customerName,
-  ) = _Success;
+  const factory OrderState.success({
+    required List<OrderItem> products,
+    required int totalQuantity,
+    required int totalPrice,
+    required String paymentMethod,
+    required int nominalBayar,
+    required int idKasir,
+    required String namaKasir,
+    required String customerName,
+    required String transactionId,
+  }) = _Success;
   const factory OrderState.error(String message) = _Error;
 }

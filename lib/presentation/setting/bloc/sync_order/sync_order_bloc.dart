@@ -25,6 +25,7 @@ class SyncOrderBloc extends Bloc<SyncOrderEvent, SyncOrderState> {
             .getOrderItemByOrderIdLocal(order.id!);
 
         final orderRequest = OrderRequestModel(
+            transactionId: order.transactionId,
             transactionTime: order.transactionTime,
             totalItem: order.totalQuantity,
             totalPrice: order.totalPrice,
@@ -52,6 +53,7 @@ class SyncOrderBloc extends Bloc<SyncOrderEvent, SyncOrderState> {
             .getOrderItemByOrderIdLocal(order.id!);
 
         final orderRequest = OrderRequestModel(
+            transactionId: order.transactionId,
             transactionTime: order.transactionTime,
             totalItem: order.totalQuantity,
             totalPrice: order.totalPrice,

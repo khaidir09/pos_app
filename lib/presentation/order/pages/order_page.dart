@@ -7,6 +7,8 @@ import 'package:flutter_pos_app/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_pos_app/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos_app/presentation/home/models/order_item.dart';
 import 'package:flutter_pos_app/presentation/home/pages/dashboard_page.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/assets/assets.gen.dart';
 import '../../../core/components/buttons.dart';
@@ -34,6 +36,36 @@ class _OrderPageState extends State<OrderPage> {
   List<OrderItem> orders = [];
 
   int totalPrice = 0;
+
+  // Tambahkan fungsi ini di dalam class State widget Anda
+  Future<String> _generateQueueNumber() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Format tanggal saat ini menjadi 'Tahun-Bulan-Tanggal', misal: '2025-07-30'
+    final String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    // Kunci untuk menyimpan data di SharedPreferences
+    const String lastDateKey = 'last_queue_date';
+    const String lastNumberKey = 'last_queue_number';
+
+    // Ambil tanggal dan nomor terakhir yang tersimpan
+    final String? savedDate = prefs.getString(lastDateKey);
+    int nextNumber = 1; // Default nomor antrian adalah 1
+
+    // Jika tanggal yang tersimpan sama dengan hari ini, naikkan nomor antrian
+    if (savedDate == currentDate) {
+      final int lastNumber = prefs.getInt(lastNumberKey) ?? 0;
+      nextNumber = lastNumber + 1;
+    }
+    // Jika tanggal beda (atau belum ada), nomor antrian tetap 1 (reset)
+
+    // Simpan tanggal hari ini dan nomor antrian yang baru
+    await prefs.setString(lastDateKey, currentDate);
+    await prefs.setInt(lastNumberKey, nextNumber);
+
+    // Format nomor agar lebih rapi (misal: A-001, A-002)
+    return 'A-${nextNumber.toString().padLeft(3, '0')}';
+  }
+
   int calculateTotalPrice(List<OrderItem> orders) {
     return orders.fold(
         0,
@@ -70,99 +102,111 @@ class _OrderPageState extends State<OrderPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-              //show dialog save order
+            onPressed: () async {
+              // 1. Generate nomor antrian sebelum menampilkan dialog
+              final String queueNumber = await _generateQueueNumber();
+
+              // Bersihkan controller sebelum dialog muncul
+              tableNumberController.clear();
+              orderNameController.clear();
+
+              // 2. Tampilkan dialog
               showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Open Bill'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          //nomor meja
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: 'Nomor Meja',
-                            ),
-                            //number
-                            keyboardType: TextInputType.number,
-                            controller: tableNumberController,
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    // Tampilkan nomor antrian di judul dialog
+                    title: Text('Open Bill (Antrian: $queueNumber)'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nomor Meja (Opsional)',
                           ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: 'Nama Pelanggan',
-                            ),
-                            controller: orderNameController,
-                            textCapitalization: TextCapitalization.words,
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Batal'),
+                          keyboardType: TextInputType.number,
+                          controller: tableNumberController,
                         ),
-                        BlocBuilder<CheckoutBloc, CheckoutState>(
-                          builder: (context, state) {
-                            return state.maybeWhen(
-                              orElse: () {
-                                return const SizedBox.shrink();
-                              },
-                              success: (data, qty, total, draftName) {
-                                return Button.outlined(
-                                  onPressed: () async {
-                                    final authData = await AuthLocalDatasource()
-                                        .getAuthData();
-                                    context.read<CheckoutBloc>().add(
-                                          CheckoutEvent.saveDraftOrder(
-                                              tableNumberController
-                                                  .text.toIntegerFromText,
-                                              orderNameController.text),
-                                        );
-
-                                    final printInt =
-                                        await CwbPrint.instance.printChecker(
-                                      data,
-                                      tableNumberController.text.toInt,
-                                      orderNameController.text,
-                                      authData.user.name,
-                                    );
-
-                                    //print for customer
-                                    CwbPrint.instance.printReceipt(printInt);
-                                    // //print for kitchen
-                                    // CwbPrint.instance.printReceipt(printInt);
-                                    //clear checkout
-                                    context.read<CheckoutBloc>().add(
-                                          const CheckoutEvent.started(),
-                                        );
-                                    //open bill success snack bar
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content:
-                                            Text('Save Draft Order Success'),
-                                        backgroundColor: AppColors.primary,
-                                      ),
-                                    );
-
-                                    context
-                                        .pushReplacement(const DashboardPage());
-                                  },
-                                  label: 'Simpan & Cetak',
-                                  fontSize: 14,
-                                  height: 40,
-                                  width: 140,
-                                );
-                              },
-                            );
-                          },
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'Nama Pelanggan',
+                          ),
+                          controller: orderNameController,
+                          textCapitalization: TextCapitalization.words,
                         ),
                       ],
-                    );
-                  });
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Batal'),
+                      ),
+                      BlocBuilder<CheckoutBloc, CheckoutState>(
+                        builder: (context, state) {
+                          return state.maybeWhen(
+                            orElse: () {
+                              return const SizedBox.shrink();
+                            },
+                            success: (data, qty, total, draftName) {
+                              return Button.outlined(
+                                onPressed: () async {
+                                  final authData =
+                                      await AuthLocalDatasource().getAuthData();
+
+                                  // 3. Gabungkan nama pelanggan dengan nomor antrian
+                                  final String finalOrderName = orderNameController
+                                          .text.isNotEmpty
+                                      ? '${orderNameController.text} - $queueNumber'
+                                      : queueNumber; // Jika nama kosong, gunakan nomor antrian saja
+
+                                  // 4. Gunakan 'finalOrderName' untuk menyimpan dan mencetak
+                                  context.read<CheckoutBloc>().add(
+                                        CheckoutEvent.saveDraftOrder(
+                                          tableNumberController
+                                              .text.toIntegerFromText,
+                                          finalOrderName, // Gunakan nama yang sudah digabung
+                                        ),
+                                      );
+
+                                  final printInt =
+                                      await CwbPrint.instance.printChecker(
+                                    data,
+                                    tableNumberController.text.toInt,
+                                    finalOrderName, // Gunakan nama yang sudah digabung
+                                    authData.user.name,
+                                  );
+
+                                  CwbPrint.instance.printReceipt(printInt);
+
+                                  context.read<CheckoutBloc>().add(
+                                        const CheckoutEvent.started(),
+                                      );
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Save Draft Order Success'),
+                                      backgroundColor: AppColors.primary,
+                                    ),
+                                  );
+
+                                  context
+                                      .pushReplacement(const DashboardPage());
+                                },
+                                label: 'Simpan',
+                                fontSize: 14,
+                                height: 40,
+                                width: 140,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             icon: const Icon(
               Icons.save_as_outlined,

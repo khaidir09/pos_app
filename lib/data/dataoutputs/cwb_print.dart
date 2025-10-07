@@ -123,7 +123,7 @@ class CwbPrint {
     List<OrderItem> products,
     int tableNumber,
     String draftName,
-    String cashierName,
+    String namaKasir,
   ) async {
     List<int> bytes = [];
 
@@ -157,20 +157,15 @@ class CwbPrint {
         'Receipt: KU-${DateFormat('yyyyMMddhhmm').format(DateTime.now())}',
         styles: const PosStyles(bold: false, align: PosAlign.left));
 //cashier name
-    bytes += generator.text('Cashier: $cashierName',
+    bytes += generator.text('Kasir: $namaKasir',
         styles: const PosStyles(bold: false, align: PosAlign.left));
     //customer name
     //column 2
     bytes += generator.row([
       PosColumn(
         text: 'Customer: $draftName',
-        width: 8,
+        width: 12,
         styles: const PosStyles(align: PosAlign.left),
-      ),
-      PosColumn(
-        text: 'DINE IN',
-        width: 4,
-        styles: const PosStyles(align: PosAlign.right),
       ),
     ]);
 
@@ -218,8 +213,7 @@ class CwbPrint {
           width: PosTextSize.size1,
         ));
 
-    bytes += generator.text(
-        'Jl. Brigjen H.Hasan Basri RT.3 (Dekat RS Pembalah Batung)',
+    bytes += generator.text('Amuntai',
         styles: const PosStyles(bold: false, align: PosAlign.center));
     bytes += generator.text('085166613149',
         styles: const PosStyles(bold: false, align: PosAlign.center));
@@ -263,23 +257,25 @@ class CwbPrint {
         styles: const PosStyles(align: PosAlign.left),
       ),
     ]);
-    bytes += generator.row([
-      PosColumn(
-        text: 'Order By',
-        width: 5,
-        styles: const PosStyles(align: PosAlign.left),
-      ),
-      PosColumn(
-        text: ':',
-        width: 1,
-        styles: const PosStyles(align: PosAlign.left),
-      ),
-      PosColumn(
-        text: customerName,
-        width: 6,
-        styles: const PosStyles(align: PosAlign.left),
-      ),
-    ]);
+    if (customerName.toLowerCase() != 'customer') {
+      bytes += generator.row([
+        PosColumn(
+          text: 'Order By',
+          width: 5,
+          styles: const PosStyles(align: PosAlign.left),
+        ),
+        PosColumn(
+          text: ':',
+          width: 1,
+          styles: const PosStyles(align: PosAlign.left),
+        ),
+        PosColumn(
+          text: customerName,
+          width: 6,
+          styles: const PosStyles(align: PosAlign.left),
+        ),
+      ]);
+    }
     bytes += generator.row([
       PosColumn(
         text: 'Kasir',

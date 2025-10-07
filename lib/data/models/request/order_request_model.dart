@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class OrderRequestModel {
+  final String transactionId;
   final String transactionTime;
   final int kasirId;
   final int totalPrice;
@@ -9,6 +10,7 @@ class OrderRequestModel {
   final List<OrderItemModel> orderItems;
 
   OrderRequestModel({
+    required this.transactionId,
     required this.transactionTime,
     required this.kasirId,
     required this.totalPrice,
@@ -24,6 +26,7 @@ class OrderRequestModel {
 
   factory OrderRequestModel.fromMap(Map<String, dynamic> json) =>
       OrderRequestModel(
+        transactionId: json["transaction_id"],
         transactionTime: json["transaction_time"],
         kasirId: json["kasir_id"],
         totalPrice: json["total_price"],
@@ -34,6 +37,7 @@ class OrderRequestModel {
       );
 
   Map<String, dynamic> toMap() => {
+        "transaction_id": transactionId,
         "transaction_time": transactionTime,
         "kasir_id": kasirId,
         "total_price": totalPrice,

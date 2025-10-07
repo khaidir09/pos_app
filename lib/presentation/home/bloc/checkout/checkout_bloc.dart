@@ -13,7 +13,7 @@ part 'checkout_state.dart';
 part 'checkout_bloc.freezed.dart';
 
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
-  CheckoutBloc() : super(const _Success([], 0, 0, 'customer')) {
+  CheckoutBloc() : super(const _Success([], 0, 0, '')) {
     on<_AddCheckout>((event, emit) {
       var currentStates = state as _Success;
       List<OrderItem> newCheckout = [...currentStates.products];

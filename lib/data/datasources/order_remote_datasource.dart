@@ -12,6 +12,7 @@ class OrderRemoteDatasource {
       'Authorization': 'Bearer ${authData.token}',
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Idempotency-Key': requestModel.transactionId, // Add idempotency key
     };
     print(requestModel.toJson());
     final response = await http.post(

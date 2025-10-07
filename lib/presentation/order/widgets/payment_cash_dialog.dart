@@ -82,39 +82,15 @@ class _PaymentCashDialogState extends State<PaymentCashDialog> {
             },
           ),
           const SpaceHeight(16.0),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Button.filled(
-          //       onPressed: () {},
-          //       label: 'Uang Pas',
-          //       disabled: true,
-          //       textColor: AppColors.primary,
-          //       fontSize: 13.0,
-          //       width: 112.0,
-          //       height: 50.0,
-          //     ),
-          //     const SpaceWidth(4.0),
-          //     Flexible(
-          //       child: Button.filled(
-          //         onPressed: () {},
-          //         label: widget.price.currencyFormatRp,
-          //         disabled: true,
-          //         textColor: AppColors.primary,
-          //         fontSize: 13.0,
-          //         height: 50.0,
-          //       ),
-          //     ),
-          //   ],
-          // ),
           const SpaceHeight(30.0),
           BlocConsumer<OrderBloc, OrderState>(
             listener: (context, state) {
               state.maybeWhen(
                 orElse: () {},
                 success: (data, qty, total, payment, nominal, idKasir,
-                    namaKasir, _) {
+                    namaKasir, customerName, transactionId) {
                   final orderModel = OrderModel(
+                      transactionId: transactionId,
                       paymentMethod: payment,
                       nominalBayar: nominal,
                       orders: data,
@@ -126,6 +102,16 @@ class _PaymentCashDialogState extends State<PaymentCashDialog> {
                       transactionTime: DateFormat('yyyy-MM-ddTHH:mm:ss')
                           .format(DateTime.now()),
                       isSync: false);
+
+                  // Add logging
+                  print('=== ORDER DATA ===');
+                  print('Transaction ID: ${orderModel.transactionId}');
+                  print('Payment Method: ${orderModel.paymentMethod}');
+                  print('Total Amount: ${orderModel.totalPrice}');
+                  print('Items: ${orderModel.orders.length}');
+                  print('Transaction Time: ${orderModel.transactionTime}');
+                  print('================');
+
                   ProductLocalDatasource.instance.saveOrder(orderModel);
                   context.pop();
                   showDialog(
@@ -138,8 +124,8 @@ class _PaymentCashDialogState extends State<PaymentCashDialog> {
             builder: (context, state) {
               return state.maybeWhen(orElse: () {
                 return const SizedBox();
-              }, success:
-                  (data, qty, total, payment, _, idKasir, mameKasir, __) {
+              }, success: (data, qty, total, payment, _, idKasir, nameKasir,
+                  transactionId, __) {
                 return Button.filled(
                   onPressed: () {
                     //check if price is empty

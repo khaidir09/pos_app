@@ -40,7 +40,7 @@ class PaymentSuccessDialog extends StatelessWidget {
           return state.maybeWhen(
             orElse: () => const SizedBox.shrink(),
             success: (data, qty, total, paymentType, nominal, idKasir,
-                nameKasir, customerName) {
+                nameKasir, customerName, transactionId) {
               context.read<CheckoutBloc>().add(const CheckoutEvent.started());
 
               return Column(
@@ -63,7 +63,7 @@ class PaymentSuccessDialog extends StatelessWidget {
                   ),
                   const Divider(height: 16.0),
                   LabelValue(
-                    label: 'Nama kasir',
+                    label: 'Nama Kasir',
                     value: nameKasir,
                   ),
                   const Divider(height: 16.0),
