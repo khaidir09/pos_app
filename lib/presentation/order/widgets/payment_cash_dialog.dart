@@ -126,7 +126,9 @@ class _PaymentCashDialogState extends State<PaymentCashDialog> {
                   showDialog(
                     context: context,
                     builder: (context) => const PaymentSuccessDialog(),
-                  );
+                  ).then((value) => context
+                      .read<CheckoutBloc>()
+                      .add(const CheckoutEvent.started()));
                 },
               );
             },

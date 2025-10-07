@@ -119,7 +119,9 @@ class _PaymentQrisDialogState extends State<PaymentQrisDialog> {
                               context: context,
                               builder: (context) =>
                                   const PaymentSuccessDialog(),
-                            );
+                            ).then((value) => context
+                                .read<CheckoutBloc>()
+                                .add(const CheckoutEvent.started()));
                           });
                         },
                         child: BlocBuilder<QrisBloc, QrisState>(

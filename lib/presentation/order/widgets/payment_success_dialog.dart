@@ -41,8 +41,6 @@ class PaymentSuccessDialog extends StatelessWidget {
             orElse: () => const SizedBox.shrink(),
             success: (data, qty, total, paymentType, nominal, idKasir,
                 nameKasir, customerName) {
-              context.read<CheckoutBloc>().add(const CheckoutEvent.started());
-
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,10 +76,6 @@ class PaymentSuccessDialog extends StatelessWidget {
                       Flexible(
                         child: Button.filled(
                           onPressed: () {
-                            context.read<CheckoutBloc>().add(
-                                  const CheckoutEvent.started(),
-                                );
-
                             context
                                 .read<OrderBloc>()
                                 .add(const OrderEvent.started());
