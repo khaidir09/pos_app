@@ -115,7 +115,10 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
     //load draft order
     on<_LoadDraftOrder>((event, emit) async {
-      emit(const _Loading());
+      // BERSIHKAN STATE SEBELUMNYA
+      emit(const _Success([], 0, 0, ''));
+
+      // Lanjutkan dengan memuat data draft
       final draftOrder = event.data;
       emit(_Success(
           draftOrder.orders
