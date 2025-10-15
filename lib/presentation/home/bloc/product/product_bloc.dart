@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_pos_app/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_pos_app/data/datasources/product_local_datasource.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -37,8 +38,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     on<_FetchLocal>((event, emit) async {
       emit(const ProductState.loading());
+      final authData = await AuthLocalDatasource().getAuthData();
       final localPproducts =
-          await ProductLocalDatasource.instance.getAllProduct();
+          await ProductLocalDatasource.instance.getAllProduct(authData.user.shopId);
       products = localPproducts;
       products.sort(
           (a, b) => (b.isBestSeller ? 1 : 0).compareTo(a.isBestSeller ? 1 : 0));
