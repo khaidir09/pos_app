@@ -14,7 +14,6 @@ class OrderState with _$OrderState {
     required String namaKasir,
     required String customerName,
     required String transactionId,
-    @Default(0) int shopId,
   }) = _Success;
   const factory OrderState.error(String message) = _Error;
 }

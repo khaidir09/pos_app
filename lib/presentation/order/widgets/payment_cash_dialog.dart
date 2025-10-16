@@ -88,8 +88,7 @@ class _PaymentCashDialogState extends State<PaymentCashDialog> {
               state.maybeWhen(
                 orElse: () {},
                 success: (data, qty, total, payment, nominal, idKasir,
-                    namaKasir, customerName, transactionId) async {
-                  final authData = await AuthLocalDatasource().getAuthData();
+                    namaKasir, customerName, transactionId) {
                   final orderModel = OrderModel(
                       transactionId: transactionId,
                       paymentMethod: payment,
@@ -102,8 +101,7 @@ class _PaymentCashDialogState extends State<PaymentCashDialog> {
                       //tranction time format 2024-01-03T22:12:22
                       transactionTime: DateFormat('yyyy-MM-ddTHH:mm:ss')
                           .format(DateTime.now()),
-                      isSync: false,
-                      shopId: authData.user.shopId);
+                      isSync: false);
 
                   // Add logging
                   print('=== ORDER DATA ===');

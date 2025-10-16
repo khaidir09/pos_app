@@ -14,7 +14,6 @@ class OrderModel {
   final String namaKasir;
   final String transactionTime;
   final bool isSync;
-  final int shopId;
   OrderModel({
     this.id,
     required this.transactionId,
@@ -27,7 +26,6 @@ class OrderModel {
     required this.namaKasir,
     required this.isSync,
     required this.transactionTime,
-    required this.shopId,
   });
 
   Map<String, dynamic> toMap() {
@@ -61,7 +59,6 @@ class OrderModel {
       'nama_kasir': namaKasir,
       'is_sync': isSync ? 1 : 0,
       'transaction_time': transactionTime,
-      'shop_id': shopId,
     };
   }
 
@@ -78,7 +75,6 @@ class OrderModel {
       namaKasir: map['nama_kasir'] ?? '',
       id: map['id']?.toInt() ?? 0,
       transactionTime: map['transaction_time'] ?? '',
-      shopId: map['shop_id']?.toInt() ?? 0,
     );
   }
 
@@ -96,7 +92,6 @@ class OrderModel {
       namaKasir: map['nama_kasir'] ?? '',
       id: map['id']?.toInt() ?? 0,
       transactionTime: map['transaction_time'] ?? '',
-      shopId: map['shop_id']?.toInt() ?? 0,
     );
   }
 
@@ -114,7 +109,6 @@ class OrderModel {
       namaKasir: map['namaKasir'] ?? '',
       id: map['id']?.toInt() ?? 0,
       transactionTime: map['transactionTime'] ?? '',
-      shopId: map['shop_id']?.toInt() ?? 0,
     );
   }
 

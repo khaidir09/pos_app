@@ -21,7 +21,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           namaKasir: '',
           customerName: '',
           transactionId: '',
-          shopId: 0,
         )) {
     on<_AddPaymentMethod>((event, emit) async {
       emit(const _Loading());
@@ -50,7 +49,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         namaKasir: userData.user.name,
         customerName: event.customerName,
         transactionId: transactionId,
-        shopId: userData.user.shopId,
       ));
     });
 
@@ -68,7 +66,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         namaKasir: currentStates.namaKasir,
         customerName: currentStates.customerName,
         transactionId: currentStates.transactionId,
-        shopId: currentStates.shopId,
       ));
     });
 
@@ -85,7 +82,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         namaKasir: '',
         customerName: '',
         transactionId: '',
-        shopId: 0,
       ));
     });
   }

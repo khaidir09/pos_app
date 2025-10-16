@@ -50,8 +50,7 @@ class ProductLocalDatasource {
             id_kasir INTEGER,
             nama_kasir TEXT,
             transaction_time TEXT,
-            is_sync INTEGER DEFAULT 0,
-            shop_id INTEGER DEFAULT 0
+            is_sync INTEGER DEFAULT 0
           )
         ''');
 
@@ -74,8 +73,7 @@ class ProductLocalDatasource {
             id_kasir INTEGER,
             nama_kasir TEXT,
             transaction_time TEXT,
-            is_sync INTEGER DEFAULT 0,
-            shop_id INTEGER DEFAULT 0
+            is_sync INTEGER DEFAULT 0
           )
         ''');
       }
@@ -109,8 +107,7 @@ class ProductLocalDatasource {
         id_kasir INTEGER,
         nama_kasir TEXT,
         transaction_time TEXT,
-        is_sync INTEGER DEFAULT 0,
-        shop_id INTEGER DEFAULT 0
+        is_sync INTEGER DEFAULT 0
       )
     ''');
 
@@ -367,10 +364,9 @@ class ProductLocalDatasource {
   }
 
   //get all data product
-  Future<List<Product>> getAllProduct(int shopId) async {
+  Future<List<Product>> getAllProduct() async {
     final db = await instance.database;
-    final result =
-        await db.query(tableProducts, where: 'shop_id = ?', whereArgs: [shopId]);
+    final result = await db.query(tableProducts);
 
     return result.map((e) => Product.fromMap(e)).toList();
   }
